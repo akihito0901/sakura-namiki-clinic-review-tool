@@ -131,21 +131,62 @@
             min-height: 120px;
         }
 
-        .action-buttons {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
+        .steps-guide {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 20px;
         }
 
-        .copy-btn, .maps-btn {
+        .steps-guide h4 {
+            margin: 0 0 20px 0;
+            color: #333;
+            font-size: 16px;
+        }
+
+        .step {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 15px;
+            padding: 15px;
+            background: white;
+            border-radius: 8px;
+            border: 1px solid #e9ecef;
+        }
+
+        .step:last-child {
+            margin-bottom: 0;
+        }
+
+        .step-number {
+            background: #4a90e2;
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 14px;
+            flex-shrink: 0;
+        }
+
+        .step-text {
             flex: 1;
-            min-width: 120px;
-            padding: 12px;
+            font-weight: 500;
+            color: #333;
+        }
+
+        .step-btn {
+            padding: 8px 16px;
             border: none;
             border-radius: 6px;
             cursor: pointer;
             font-size: 14px;
             transition: all 0.3s;
+            min-width: 120px;
         }
 
         .copy-btn {
@@ -274,13 +315,19 @@
             <div class="generated-text" id="generatedText">
                 <div class="loading">口コミを生成中...</div>
             </div>
-            <p style="font-size: 14px; color: #666; margin-bottom: 15px;">
-                📝 口コミ文章をコピーして、URLからGoogleマップのレビューページに直接投稿できます
-            </p>
-            <div class="action-buttons">
-                <button class="copy-btn" id="copyBtn">口コミをコピー</button>
-                <button class="copy-btn" id="copyUrlBtn" style="background: #6f42c1;">URLをコピー</button>
-                <button class="maps-btn" id="mapsBtn">Googleマップで投稿する</button>
+            
+            <div class="steps-guide">
+                <h4>📝 投稿手順</h4>
+                <div class="step">
+                    <span class="step-number">1</span>
+                    <span class="step-text">口コミをコピー</span>
+                    <button class="copy-btn step-btn" id="copyBtn">コピーする</button>
+                </div>
+                <div class="step">
+                    <span class="step-number">2</span>
+                    <span class="step-text">Googleマップで投稿</span>
+                    <button class="maps-btn step-btn" id="mapsBtn">投稿ページを開く</button>
+                </div>
             </div>
         </div>
     </div>

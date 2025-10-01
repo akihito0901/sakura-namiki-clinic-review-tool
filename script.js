@@ -82,10 +82,6 @@ class ReviewGenerator {
             this.copyToClipboard();
         });
 
-        document.getElementById('copyUrlBtn').addEventListener('click', () => {
-            this.copyUrlToClipboard();
-        });
-
         document.getElementById('mapsBtn').addEventListener('click', () => {
             this.openGoogleMaps();
         });
@@ -138,26 +134,6 @@ class ReviewGenerator {
         }
     }
 
-    async copyUrlToClipboard() {
-        const reviewUrl = 'https://g.page/r/Ce8_5GRA1H1fEAE/review';
-        try {
-            await navigator.clipboard.writeText(reviewUrl);
-            
-            // ボタンテキストを一時的に変更
-            const btn = document.getElementById('copyUrlBtn');
-            const originalText = btn.textContent;
-            btn.textContent = 'URL完了！';
-            btn.style.background = '#20c997';
-            
-            setTimeout(() => {
-                btn.textContent = originalText;
-                btn.style.background = '#6f42c1';
-            }, 2000);
-        } catch (err) {
-            console.error('URLコピーに失敗しました:', err);
-            alert('URLコピーに失敗しました。');
-        }
-    }
 
     openGoogleMaps() {
         // 桜並木駅前整骨院の直接レビューURL
