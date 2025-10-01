@@ -82,6 +82,10 @@ class ReviewGenerator {
             this.copyToClipboard();
         });
 
+        document.getElementById('copyUrlBtn').addEventListener('click', () => {
+            this.copyUrlToClipboard();
+        });
+
         document.getElementById('mapsBtn').addEventListener('click', () => {
             this.openGoogleMaps();
         });
@@ -121,7 +125,7 @@ class ReviewGenerator {
             // ボタンテキストを一時的に変更
             const btn = document.getElementById('copyBtn');
             const originalText = btn.textContent;
-            btn.textContent = 'コピーしました！';
+            btn.textContent = 'コピー完了！';
             btn.style.background = '#20c997';
             
             setTimeout(() => {
@@ -134,10 +138,31 @@ class ReviewGenerator {
         }
     }
 
+    async copyUrlToClipboard() {
+        const reviewUrl = 'https://g.page/r/Ce8_5GRA1H1fEAE/review';
+        try {
+            await navigator.clipboard.writeText(reviewUrl);
+            
+            // ボタンテキストを一時的に変更
+            const btn = document.getElementById('copyUrlBtn');
+            const originalText = btn.textContent;
+            btn.textContent = 'URL完了！';
+            btn.style.background = '#20c997';
+            
+            setTimeout(() => {
+                btn.textContent = originalText;
+                btn.style.background = '#6f42c1';
+            }, 2000);
+        } catch (err) {
+            console.error('URLコピーに失敗しました:', err);
+            alert('URLコピーに失敗しました。');
+        }
+    }
+
     openGoogleMaps() {
-        // 桜並木駅前整骨院のGoogleマップURL（実際の場所に置き換えてください）
-        const mapsUrl = 'https://www.google.com/maps/search/桜並木駅前整骨院/@35.6812,139.7671,15z';
-        window.open(mapsUrl, '_blank');
+        // 桜並木駅前整骨院の直接レビューURL
+        const reviewUrl = 'https://g.page/r/Ce8_5GRA1H1fEAE/review';
+        window.open(reviewUrl, '_blank');
     }
 }
 

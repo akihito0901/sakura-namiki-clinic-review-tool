@@ -134,15 +134,17 @@
         .action-buttons {
             display: flex;
             gap: 10px;
+            flex-wrap: wrap;
         }
 
         .copy-btn, .maps-btn {
             flex: 1;
+            min-width: 120px;
             padding: 12px;
             border: none;
             border-radius: 6px;
             cursor: pointer;
-            font-size: 16px;
+            font-size: 14px;
             transition: all 0.3s;
         }
 
@@ -272,8 +274,12 @@
             <div class="generated-text" id="generatedText">
                 <div class="loading">口コミを生成中...</div>
             </div>
+            <p style="font-size: 14px; color: #666; margin-bottom: 15px;">
+                📝 口コミ文章をコピーして、URLからGoogleマップのレビューページに直接投稿できます
+            </p>
             <div class="action-buttons">
-                <button class="copy-btn" id="copyBtn">コピーする</button>
+                <button class="copy-btn" id="copyBtn">口コミをコピー</button>
+                <button class="copy-btn" id="copyUrlBtn" style="background: #6f42c1;">URLをコピー</button>
                 <button class="maps-btn" id="mapsBtn">Googleマップで投稿する</button>
             </div>
         </div>
