@@ -97,85 +97,11 @@ class ReviewGenerator {
     async generateReview() {
         this.showResults();
         
-        // OpenAI API呼び出しの代わりにダミー生成を使用
-        // 実際の実装では、ここでOpenAI APIを呼び出します
-        try {
-            const review = await this.callOpenAI();
-            document.getElementById('generatedText').textContent = review;
-        } catch (error) {
-            console.error('Error generating review:', error);
-            // フォールバック：ローカル生成
-            const review = this.generateLocalReview();
-            document.getElementById('generatedText').textContent = review;
-        }
+        // 高度なローカル生成を使用
+        const review = generateAdvancedReview(this.ratings);
+        document.getElementById('generatedText').textContent = review;
     }
 
-    async callOpenAI() {
-        // サーバーサイドAPIを呼び出し
-        const response = await fetch('/api/generate-review', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                ratings: this.ratings
-            })
-        });
-
-        if (!response.ok) {
-            throw new Error('API呼び出しに失敗しました');
-        }
-
-        const data = await response.json();
-        
-        if (data.fallback) {
-            throw new Error('APIキーが設定されていません');
-        }
-        
-        return data.review;
-    }
-
-
-    generateLocalReview() {
-        const { treatment, staff, access, relaxation, recommendation } = this.ratings;
-        
-        let review = "桜並木駅前整骨院に通院しました。";
-        
-        // 施術について
-        if (treatment >= 4) {
-            review += "施術は非常に効果的で、痛みが大幅に軽減されました。";
-        } else if (treatment >= 3) {
-            review += "施術は丁寧に行っていただき、改善を感じています。";
-        }
-        
-        // スタッフ対応
-        if (staff >= 4) {
-            review += "院長先生の説明はとても分かりやすく、安心して治療を受けることができました。";
-        } else if (staff >= 3) {
-            review += "スタッフの対応も親切で好感が持てました。";
-        }
-        
-        // アクセス
-        if (access >= 4) {
-            review += "駅から近くてアクセスも良好です。";
-        } else if (access >= 3) {
-            review += "立地も通いやすい場所にあります。";
-        }
-        
-        // リラックス
-        if (relaxation >= 4) {
-            review += "院内の雰囲気も落ち着いており、リラックスして治療を受けられました。";
-        }
-        
-        // 推薦
-        if (recommendation >= 4) {
-            review += "知人にもぜひ勧めたい整骨院です。";
-        } else if (recommendation >= 3) {
-            review += "また利用させていただきたいと思います。";
-        }
-        
-        return review;
-    }
 
     showResults() {
         document.getElementById('questionnaire').style.display = 'none';
