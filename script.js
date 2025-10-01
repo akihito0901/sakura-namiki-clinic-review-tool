@@ -111,37 +111,14 @@ class ReviewGenerator {
     }
 
     async callOpenAI() {
-        // 注意: 実際の本番環境ではAPIキーをクライアントサイドに含めるべきではありません
-        // この実装はデモ用です。本番環境ではサーバーサイドでAPI呼び出しを行ってください。
-        
-        const apiKey = 'YOUR_OPENAI_API_KEY'; // 実際のAPIキーに置き換えてください
-        
-        if (!apiKey || apiKey === 'YOUR_OPENAI_API_KEY') {
-            throw new Error('APIキーが設定されていません');
-        }
-
-        const prompt = this.createPrompt();
-        
-        const response = await fetch('https://api.openai.com/v1/chat/completions', {
+        // サーバーサイドAPIを呼び出し
+        const response = await fetch('/api/generate-review', {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${apiKey}`
+                'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                model: 'gpt-3.5-turbo',
-                messages: [
-                    {
-                        role: 'system',
-                        content: 'あなたは桜並木駅前整骨院の満足した患者です。アンケート結果に基づいて自然で好意的な口コミを生成してください。150-200文字程度で、具体的で説得力のある内容にしてください。'
-                    },
-                    {
-                        role: 'user',
-                        content: prompt
-                    }
-                ],
-                max_tokens: 300,
-                temperature: 0.7
+                ratings: this.ratings
             })
         });
 
@@ -150,21 +127,14 @@ class ReviewGenerator {
         }
 
         const data = await response.json();
-        return data.choices[0].message.content.trim();
-    }
-
-    createPrompt() {
-        const { treatment, staff, access, relaxation, recommendation } = this.ratings;
         
-        return `桜並木駅前整骨院のアンケート結果:
-施術の満足度: ${treatment}/5 (${this.ratingTexts[treatment]})
-院長の対応: ${staff}/5 (${this.ratingTexts[staff]})
-アクセス: ${access}/5 (${this.ratingTexts[access]})
-リラックス度: ${relaxation}/5 (${this.ratingTexts[relaxation]})
-推薦意向: ${recommendation}/5 (${this.ratingTexts[recommendation]})
-
-この結果に基づいて、自然で好意的な口コミレビューを生成してください。`;
+        if (data.fallback) {
+            throw new Error('APIキーが設定されていません');
+        }
+        
+        return data.review;
     }
+
 
     generateLocalReview() {
         const { treatment, staff, access, relaxation, recommendation } = this.ratings;
