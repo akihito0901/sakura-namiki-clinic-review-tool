@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>桜並木駅前整骨院 口コミ作成ツール</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Hiragino Sans', 'Yu Gothic', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            overflow: hidden;
+        }
+
+        .header {
+            background: #4a90e2;
+            color: white;
+            text-align: center;
+            padding: 30px 20px;
+        }
+
+        .header h1 {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            opacity: 0.9;
+            font-size: 14px;
+        }
+
+        .form-section {
+            padding: 30px;
+        }
+
+        .question {
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .question:last-child {
+            border-bottom: none;
+        }
+
+        .question h3 {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+
+        .rating-container {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .star-rating {
+            display: flex;
+            gap: 5px;
+        }
+
+        .star {
+            font-size: 30px;
+            color: #ddd;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .star.active,
+        .star:hover {
+            color: #ffd700;
+        }
+
+        .rating-text {
+            margin-left: 15px;
+            font-size: 14px;
+            color: #666;
+        }
+
+        .generate-btn {
+            width: 100%;
+            background: #4a90e2;
+            color: white;
+            border: none;
+            padding: 15px;
+            font-size: 18px;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: background 0.3s;
+        }
+
+        .generate-btn:hover {
+            background: #357abd;
+        }
+
+        .generate-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        .result-section {
+            display: none;
+            padding: 30px;
+            background: #f8f9fa;
+        }
+
+        .generated-text {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            margin-bottom: 20px;
+            line-height: 1.6;
+            min-height: 120px;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .copy-btn, .maps-btn {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+
+        .copy-btn {
+            background: #28a745;
+            color: white;
+        }
+
+        .copy-btn:hover {
+            background: #218838;
+        }
+
+        .maps-btn {
+            background: #dc3545;
+            color: white;
+        }
+
+        .maps-btn:hover {
+            background: #c82333;
+        }
+
+        .loading {
+            text-align: center;
+            color: #666;
+            font-style: italic;
+        }
+
+        .back-btn {
+            background: #6c757d;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-bottom: 20px;
+        }
+
+        .back-btn:hover {
+            background: #5a6268;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>桜並木駅前整骨院</h1>
+            <p>口コミ作成ツール</p>
+        </div>
+
+        <div class="form-section" id="questionnaire">
+            <div class="question">
+                <h3>1. 施術はどうでしたか？</h3>
+                <div class="rating-container">
+                    <div class="star-rating" data-question="treatment">
+                        <span class="star" data-rating="1">★</span>
+                        <span class="star" data-rating="2">★</span>
+                        <span class="star" data-rating="3">★</span>
+                        <span class="star" data-rating="4">★</span>
+                        <span class="star" data-rating="5">★</span>
+                    </div>
+                    <span class="rating-text" id="treatment-text"></span>
+                </div>
+            </div>
+
+            <div class="question">
+                <h3>2. 院長の対応はどうでしたか？</h3>
+                <div class="rating-container">
+                    <div class="star-rating" data-question="staff">
+                        <span class="star" data-rating="1">★</span>
+                        <span class="star" data-rating="2">★</span>
+                        <span class="star" data-rating="3">★</span>
+                        <span class="star" data-rating="4">★</span>
+                        <span class="star" data-rating="5">★</span>
+                    </div>
+                    <span class="rating-text" id="staff-text"></span>
+                </div>
+            </div>
+
+            <div class="question">
+                <h3>3. アクセスはよかったですか？</h3>
+                <div class="rating-container">
+                    <div class="star-rating" data-question="access">
+                        <span class="star" data-rating="1">★</span>
+                        <span class="star" data-rating="2">★</span>
+                        <span class="star" data-rating="3">★</span>
+                        <span class="star" data-rating="4">★</span>
+                        <span class="star" data-rating="5">★</span>
+                    </div>
+                    <span class="rating-text" id="access-text"></span>
+                </div>
+            </div>
+
+            <div class="question">
+                <h3>4. リラックスできましたか？</h3>
+                <div class="rating-container">
+                    <div class="star-rating" data-question="relaxation">
+                        <span class="star" data-rating="1">★</span>
+                        <span class="star" data-rating="2">★</span>
+                        <span class="star" data-rating="3">★</span>
+                        <span class="star" data-rating="4">★</span>
+                        <span class="star" data-rating="5">★</span>
+                    </div>
+                    <span class="rating-text" id="relaxation-text"></span>
+                </div>
+            </div>
+
+            <div class="question">
+                <h3>5. 他の人にも勧めたいと思いますか？</h3>
+                <div class="rating-container">
+                    <div class="star-rating" data-question="recommendation">
+                        <span class="star" data-rating="1">★</span>
+                        <span class="star" data-rating="2">★</span>
+                        <span class="star" data-rating="3">★</span>
+                        <span class="star" data-rating="4">★</span>
+                        <span class="star" data-rating="5">★</span>
+                    </div>
+                    <span class="rating-text" id="recommendation-text"></span>
+                </div>
+            </div>
+
+            <button class="generate-btn" id="generateBtn" disabled>口コミを生成する</button>
+        </div>
+
+        <div class="result-section" id="results">
+            <button class="back-btn" id="backBtn">← アンケートに戻る</button>
+            <h3>生成された口コミ</h3>
+            <div class="generated-text" id="generatedText">
+                <div class="loading">口コミを生成中...</div>
+            </div>
+            <div class="action-buttons">
+                <button class="copy-btn" id="copyBtn">コピーする</button>
+                <button class="maps-btn" id="mapsBtn">Googleマップで投稿する</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
